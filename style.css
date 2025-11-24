@@ -1,32 +1,21 @@
-/* ================================
-   1. 기본 컬러 변수
-================================ */
 :root {
     --bg: #fdf5ee;
     --bg-soft: #fff3e0;
-
     --card-bg: #ffffff;
-
     --text-main: #2b1b12;
     --text-sub: #6b4b3a;
-
-    --accent: #ff7043;
-    --accent-soft: #ffe0cc;
-    --accent-strong: #f4511e;
-
+    --accent: #4caf50;
+    --accent-soft: #dcedc8;
+    --accent-strong: #2e7d32;
     --border-subtle: #f3c9a9;
-
     --shadow-soft: 0 18px 40px rgba(0,0,0,0.12);
-
     --radius-md: 14px;
     --radius-lg: 20px;
 }
 
-/* ================================
-   2. 카테고리 테마 색상
-================================ */
-
-/* 한식 = 초록 */
+/* ===========================
+   테마 정의
+=========================== */
 body.theme-korean {
     --accent: #4caf50;
     --accent-soft: #dcedc8;
@@ -35,7 +24,6 @@ body.theme-korean {
     --bg-soft: #e7f4e0;
 }
 
-/* 중식 = 레드 */
 body.theme-chinese {
     --accent: #e53935;
     --accent-soft: #ffcdd2;
@@ -44,7 +32,6 @@ body.theme-chinese {
     --bg-soft: #ffdadd;
 }
 
-/* 일식 = 오렌지 */
 body.theme-japanese {
     --accent: #ffa000;
     --accent-soft: #ffe6b3;
@@ -53,7 +40,6 @@ body.theme-japanese {
     --bg-soft: #ffefc3;
 }
 
-/* 양식 = 블루 */
 body.theme-western {
     --accent: #42a5f5;
     --accent-soft: #bbdefb;
@@ -62,32 +48,38 @@ body.theme-western {
     --bg-soft: #d7e8fa;
 }
 
-/* ================================
-   3. 무지개 랜덤 추천 전용 모드
-================================ */
+/* ===========================
+   완전 랜덤용 rainbow 모드
+   (배경 = 파스텔 무지개, 포인트 = 살구/오렌지)
+=========================== */
 body.rainbow-mode {
+    /* 배경 그라디언트 */
     background: linear-gradient(
         135deg,
-        #ffebee 10%,
-        #fff8e1 25%,
-        #f1f8e9 40%,
-        #e3f2fd 60%,
-        #ede7f6 80%,
-        #fce4ec 100%
+        #ffe6df 5%,
+        #fff2d9 25%,
+        #f2ffe3 45%,
+        #e4f3ff 65%,
+        #f3e7ff 85%,
+        #ffe7f0 100%
     );
     background-attachment: fixed;
-    background-size: 100% 100%;
+
+    /* 이 모드에서 사용할 색 변수 */
+    --accent: #ff8a65;
+    --accent-soft: #ffe0cc;
+    --accent-strong: #f4511e;
+    --bg-soft: #ffe9d6;
 }
 
-/* ================================
-   4. 레이아웃 및 기본 UI
-================================ */
+/* ===========================
+   기본 레이아웃
+=========================== */
 body {
     margin: 0;
-    background: var(--bg);
     font-family: "Noto Sans KR", sans-serif;
-    color: var(--text-main);
-    transition: background 0.3s ease, color 0.3s ease;
+    background: var(--bg);
+    transition: background 0.3s ease;
 }
 
 .app {
@@ -95,24 +87,23 @@ body {
     margin: 0 auto;
 }
 
-/* 상단 */
 .top-bar {
+    padding: 20px;
     display: flex;
     align-items: center;
-    padding: 20px 20px 10px;
 }
 
 .logo-title {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
 }
 
 .logo-dot {
     width: 30px;
     height: 30px;
-    background: var(--accent);
     border-radius: 12px;
+    background: var(--accent);
 }
 
 .app-title {
@@ -126,51 +117,41 @@ body {
 }
 
 .container {
-    padding: 14px 16px 30px;
+    padding: 20px 16px;
 }
 
-/* ================================
-   5. 버튼 스타일
-================================ */
+/* ===========================
+   버튼
+=========================== */
 .btn {
     border: none;
     border-radius: var(--radius-md);
-    padding: 12px 16px;
-    font-size: 15px;
-    font-weight: 600;
+    padding: 12px;
+    font-weight: 700;
+    width: 100%;
     cursor: pointer;
-    transition: 0.16s ease;
+    transition: 0.15s ease;
 }
 
 .btn:active {
-    transform: scale(0.95);
+    transform: scale(0.94);
 }
 
-/* 비활성 버튼 */
 .btn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
 }
 
-/* ================================
-   6. 카테고리 버튼
-================================ */
+/* 카테고리 버튼 */
 .category-wrapper {
     display: flex;
     gap: 8px;
-    margin-bottom: 10px;
 }
 
 .category-btn {
-    flex: 1;
+    background: var(--accent-soft);
     color: var(--text-sub);
-    background: var(--accent-soft);
     border: 2px solid transparent;
-}
-
-.category-btn:hover:not(.category-active) {
-    background: var(--accent-soft);
-    filter: brightness(0.96);
 }
 
 .category-active {
@@ -179,59 +160,53 @@ body {
     border-color: var(--accent-strong);
 }
 
-/* ================================
-   7. 추천 버튼
-================================ */
+/* 추천 버튼 */
 .primary-btn {
-    width: 100%;
+    margin-top: 12px;
     background: var(--accent);
     color: white;
-    margin-top: 12px;
 }
 
 .secondary-btn {
-    width: 100%;
+    margin-top: 10px;
     background: #6d4c41;
     color: #ffecb3;
-    margin-top: 10px;
 }
 
-/* ================================
-   8. 결과 카드
-================================ */
+/* ===========================
+   결과 카드
+=========================== */
 .food-card {
-    margin-top: 22px;
+    margin-top: 20px;
+    padding: 22px;
     background: var(--card-bg);
-    padding: 24px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-soft);
     min-height: 110px;
-    transition: 0.22s ease;
 }
 
-/* 팝 효과 */
 .food-card.pop {
     animation: popIn 0.25s ease-out;
 }
 
 @keyframes popIn {
-    0%   { transform: scale(0.92); opacity: 0; }
-    75%  { transform: scale(1.04); opacity: 1; }
-    100% { transform: scale(1.0); }
+    0% { transform: scale(0.92); opacity: 0; }
+    70% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); }
 }
 
-/* ================================
-   9. 최근 추천 영역
-================================ */
+/* ===========================
+   최근 추천
+=========================== */
 .recent {
     margin-top: 30px;
 }
 
 .recent-list {
-    border-radius: 16px;
-    padding: 14px;
+    padding: 16px;
     background: var(--bg-soft);
     border: 1px solid var(--border-subtle);
+    border-radius: 16px;
 }
 
 .recent-item {
@@ -241,4 +216,77 @@ body {
 
 .recent-item:last-child {
     border-bottom: none;
+}
+
+/* ===========================
+   하단 광고 박스
+=========================== */
+.bottom-ad {
+    margin-top: 35px;
+}
+
+.bottom-ad-box {
+    background: #ececec;
+    border: 2px dashed #aaaaaa;
+    border-radius: 16px;
+    padding: 26px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: #444;
+}
+
+/* ===========================
+   팝업 광고
+=========================== */
+.popup-ad.hidden {
+    display: none;
+}
+
+.popup-ad {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.popup-box {
+    width: 80%;
+    max-width: 360px;
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    animation: popupShow 0.25s ease-out;
+}
+
+@keyframes popupShow {
+    0% { transform: scale(0.85); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.close-btn {
+    position: absolute;
+    right: 14px;
+    top: 12px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.popup-title {
+    font-size: 20px;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.popup-content {
+    font-size: 15px;
+    color: #444;
 }
