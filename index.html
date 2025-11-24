@@ -29,6 +29,7 @@
         </header>
 
         <main class="container">
+
             <p class="subtitle">
                 한식 · 중식 · 일식 · 양식 중에서<br />딱 맞는 메뉴를 추천해드려요.
             </p>
@@ -45,27 +46,46 @@
                         onclick="setCategory('western', this)">양식</button>
             </div>
 
-            <!-- 추천 버튼 (초기에는 disabled) -->
+            <!-- 추천 버튼 -->
             <button id="recommendBtn" class="btn primary-btn" onclick="recommend()" disabled>
                 🍽 이 카테고리에서 추천받기
             </button>
 
-            <!-- 완전 랜덤 추천 -->
+            <!-- 완전 랜덤 -->
             <button class="btn secondary-btn" onclick="recommendAll()">
                 🎲 완전 랜덤으로 추천받기
             </button>
 
+            <!-- 결과 -->
             <section id="result" class="food-card">
                 <p class="placeholder-text">
                     카테고리를 선택한 뒤<br>추천 버튼을 눌러보세요.
                 </p>
             </section>
 
+            <!-- 최근 추천 -->
             <section class="recent">
                 <h3>최근 추천 메뉴</h3>
                 <div id="recent-list" class="recent-list"></div>
             </section>
+
+            <!-- ★ 하단 광고 박스 (상시 존재) -->
+            <div class="bottom-ad">
+                <div class="bottom-ad-box">
+                    <span>📢 하단 광고 영역 (MVP)</span>
+                </div>
+            </div>
+
         </main>
+    </div>
+
+    <!-- ★ 추천 5번마다 뜨는 팝업 광고 -->
+    <div id="popupAd" class="popup-ad hidden">
+        <div class="popup-box">
+            <button class="close-btn" onclick="closeAd()">✕</button>
+            <p class="popup-title">📢 광고</p>
+            <p class="popup-content">여기는 팝업 광고가 들어가는 영역입니다.</p>
+        </div>
     </div>
 
     <script src="script.js"></script>
