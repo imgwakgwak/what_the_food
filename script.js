@@ -1,293 +1,145 @@
-:root {
-    --bg: #fdf5ee;
-    --bg-soft: #fff3e0;
-    --card-bg: #ffffff;
-    --text-main: #2b1b12;
-    --text-sub: #6b4b3a;
-    --accent: #4caf50;
-    --accent-soft: #dcedc8;
-    --accent-strong: #2e7d32;
-    --border-subtle: #f3c9a9;
-    --shadow-soft: 0 18px 40px rgba(0,0,0,0.12);
-    --radius-md: 14px;
-    --radius-lg: 20px;
+let currentCategory = "korean";
+let recommendCount = 0;
+
+const foods = {
+    korean: ["김치찌개","된장찌개","불고기","비빔밥","삼겹살","갈비탕","설렁탕","순대국",
+        "감자탕","제육볶음","찜닭","부대찌개","떡볶이","닭강정","냉면","갈비찜",
+        "삼계탕","김밥","잔치국수","육개장"],
+
+    chinese: ["짜장면","짬뽕","탕수육","마라탕","마라샹궈","꿔바로우","짜장밥",
+        "볶음밥","딤섬","유산슬","깐풍기","라조기","팔보채","샤오롱바오",
+        "우육면","잡채밥","어향가지","하얀짬뽕","울면","만두"],
+
+    japanese: ["초밥","라멘","우동","돈카츠","규동","가츠동","야키니쿠",
+        "타코야키","오니기리","카레라이스","텐동","샤부샤부","사케동",
+        "히레카츠","오므라이스","오코노미야키","소바","규카츠",
+        "카라아게","스키야키"],
+
+    western: ["피자","파스타","스테이크","햄버거","샐러드","리조또","감바스",
+        "그라탱","필라프","미트볼","바베큐","핫도그","클럽샌드위치",
+        "치킨파마산","포크립","프렌치프라이","크림스프"]
+};
+
+/* 테마 변경 */
+function updateThemeClass(cat) {
+    document.body.className = `theme-${cat}`;
 }
 
-/* ===========================
-   테마 정의
-=========================== */
-body.theme-korean {
-    --accent: #4caf50;
-    --accent-soft: #dcedc8;
-    --accent-strong: #2e7d32;
-    --bg: #f1f8e9;
-    --bg-soft: #e7f4e0;
+/* 카테고리 선택 */
+function setCategory(cat, btn) {
+    currentCategory = cat;
+    updateThemeClass(cat);
+
+    document.querySelectorAll(".category-btn")
+        .forEach(b => b.classList.remove("category-active"));
+
+    btn.classList.add("category-active");
+
+    document.getElementById("recommendBtn").disabled = false;
 }
 
-body.theme-chinese {
-    --accent: #e53935;
-    --accent-soft: #ffcdd2;
-    --accent-strong: #c62828;
-    --bg: #ffebee;
-    --bg-soft: #ffdadd;
+/* 팝업 광고 */
+function showAd() {
+    document.getElementById("popupAd").classList.remove("hidden");
+}
+function closeAd() {
+    document.getElementById("popupAd").classList.add("hidden");
 }
 
-body.theme-japanese {
-    --accent: #ffa000;
-    --accent-soft: #ffe6b3;
-    --accent-strong: #ff8f00;
-    --bg: #fff8e1;
-    --bg-soft: #ffefc3;
+/* 5회 카운트 */
+function checkPopup() {
+    recommendCount++;
+    if (recommendCount >= 5) {
+        recommendCount = 0;
+        showAd();
+    }
 }
 
-body.theme-western {
-    --accent: #42a5f5;
-    --accent-soft: #bbdefb;
-    --accent-strong: #1e88e5;
-    --bg: #e3f2fd;
-    --bg-soft: #d7e8fa;
+/* 추천 결과 애니메이션 */
+function applyPopAnimation() {
+    const box = document.getElementById("result");
+    box.classList.remove("pop");
+    void box.offsetWidth;
+    box.classList.add("pop");
 }
 
-/* ===========================
-   완전 랜덤용 rainbow 모드
-   (배경 = 파스텔 무지개, 포인트 = 살구/오렌지)
-=========================== */
-body.rainbow-mode {
-    /* 배경 그라디언트 */
-    background: linear-gradient(
-        135deg,
-        #ffe6df 5%,
-        #fff2d9 25%,
-        #f2ffe3 45%,
-        #e4f3ff 65%,
-        #f3e7ff 85%,
-        #ffe7f0 100%
-    );
-    background-attachment: fixed;
-
-    /* 이 모드에서 사용할 색 변수 */
-    --accent: #ff8a65;
-    --accent-soft: #ffe0cc;
-    --accent-strong: #f4511e;
-    --bg-soft: #ffe9d6;
+function currentCategoryName() {
+    return {
+        korean: "한식",
+        chinese: "중식",
+        japanese: "일식",
+        western: "양식"
+    }[currentCategory];
 }
 
-/* ===========================
-   기본 레이아웃
-=========================== */
-body {
-    margin: 0;
-    font-family: "Noto Sans KR", sans-serif;
-    background: var(--bg);
-    transition: background 0.3s ease;
+/* 카테고리 추천 */
+function recommend() {
+    checkPopup();
+
+    const list = foods[currentCategory];
+    const pick = list[Math.floor(Math.random()*list.length)];
+
+    document.getElementById("result").innerHTML = `
+        <h2>${pick}</h2>
+        <p>${currentCategoryName()} 메뉴 추천입니다.</p>
+    `;
+
+    saveRecent(pick, currentCategoryName());
+    renderRecent();
+    applyPopAnimation();
 }
 
-.app {
-    max-width: 480px;
-    margin: 0 auto;
+/* 완전 랜덤 */
+function recommendAll() {
+    checkPopup();
+
+    const all = [
+        ...foods.korean.map(f => ({name:f,cat:"한식"})),
+        ...foods.chinese.map(f => ({name:f,cat:"중식"})),
+        ...foods.japanese.map(f => ({name:f,cat:"일식"})),
+        ...foods.western.map(f => ({name:f,cat:"양식"}))
+    ];
+
+    const pick = all[Math.floor(Math.random()*all.length)];
+
+    document.body.className = "rainbow-mode";
+
+    document.querySelectorAll(".category-btn")
+        .forEach(btn => btn.classList.remove("category-active"));
+
+    document.getElementById("recommendBtn").disabled = true;
+
+    document.getElementById("result").innerHTML = `
+        <h2>${pick.name}</h2>
+        <p>${pick.cat} 메뉴 중 랜덤 추천입니다.</p>
+    `;
+
+    saveRecent(pick.name, pick.cat);
+    renderRecent();
+    applyPopAnimation();
 }
 
-.top-bar {
-    padding: 20px;
-    display: flex;
-    align-items: center;
+/* 최근 추천 저장 */
+function saveRecent(name, cat) {
+    let recent = JSON.parse(localStorage.getItem("recentFoods")) || [];
+    recent.unshift({name, cat});
+    recent = recent.slice(0,3);
+    localStorage.setItem("recentFoods", JSON.stringify(recent));
 }
 
-.logo-title {
-    display: flex;
-    gap: 12px;
-    align-items: center;
+/* 최근 추천 렌더 */
+function renderRecent() {
+    let recent = JSON.parse(localStorage.getItem("recentFoods")) || [];
+    const box = document.getElementById("recent-list");
+
+    if (recent.length === 0) {
+        box.innerHTML = `<div class="recent-item">아직 추천 기록이 없습니다.</div>`;
+        return;
+    }
+
+    box.innerHTML = recent
+        .map(r => `<div class="recent-item">• [${r.cat}] ${r.name}</div>`)
+        .join("");
 }
 
-.logo-dot {
-    width: 30px;
-    height: 30px;
-    border-radius: 12px;
-    background: var(--accent);
-}
-
-.app-title {
-    font-size: 20px;
-    font-weight: 900;
-}
-
-.app-subtitle {
-    font-size: 12px;
-    color: var(--text-sub);
-}
-
-.container {
-    padding: 20px 16px;
-}
-
-/* ===========================
-   버튼
-=========================== */
-.btn {
-    border: none;
-    border-radius: var(--radius-md);
-    padding: 12px;
-    font-weight: 700;
-    width: 100%;
-    cursor: pointer;
-    transition: 0.15s ease;
-}
-
-.btn:active {
-    transform: scale(0.94);
-}
-
-.btn:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-/* 카테고리 버튼 */
-.category-wrapper {
-    display: flex;
-    gap: 8px;
-}
-
-.category-btn {
-    background: var(--accent-soft);
-    color: var(--text-sub);
-    border: 2px solid transparent;
-}
-
-.category-active {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent-strong);
-}
-
-/* 추천 버튼 */
-.primary-btn {
-    margin-top: 12px;
-    background: var(--accent);
-    color: white;
-}
-
-.secondary-btn {
-    margin-top: 10px;
-    background: #6d4c41;
-    color: #ffecb3;
-}
-
-/* ===========================
-   결과 카드
-=========================== */
-.food-card {
-    margin-top: 20px;
-    padding: 22px;
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-soft);
-    min-height: 110px;
-}
-
-.food-card.pop {
-    animation: popIn 0.25s ease-out;
-}
-
-@keyframes popIn {
-    0% { transform: scale(0.92); opacity: 0; }
-    70% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(1); }
-}
-
-/* ===========================
-   최근 추천
-=========================== */
-.recent {
-    margin-top: 30px;
-}
-
-.recent-list {
-    padding: 16px;
-    background: var(--bg-soft);
-    border: 1px solid var(--border-subtle);
-    border-radius: 16px;
-}
-
-.recent-item {
-    padding: 6px 0;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.recent-item:last-child {
-    border-bottom: none;
-}
-
-/* ===========================
-   하단 광고 박스
-=========================== */
-.bottom-ad {
-    margin-top: 35px;
-}
-
-.bottom-ad-box {
-    background: #ececec;
-    border: 2px dashed #aaaaaa;
-    border-radius: 16px;
-    padding: 26px;
-    text-align: center;
-    font-size: 15px;
-    font-weight: 600;
-    color: #444;
-}
-
-/* ===========================
-   팝업 광고
-=========================== */
-.popup-ad.hidden {
-    display: none;
-}
-
-.popup-ad {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-}
-
-.popup-box {
-    width: 80%;
-    max-width: 360px;
-    background: white;
-    border-radius: 20px;
-    padding: 24px;
-    text-align: center;
-    position: relative;
-    animation: popupShow 0.25s ease-out;
-}
-
-@keyframes popupShow {
-    0% { transform: scale(0.85); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.close-btn {
-    position: absolute;
-    right: 14px;
-    top: 12px;
-    background: none;
-    border: none;
-    font-size: 22px;
-    cursor: pointer;
-}
-
-.popup-title {
-    font-size: 20px;
-    font-weight: 900;
-    margin-bottom: 6px;
-}
-
-.popup-content {
-    font-size: 15px;
-    color: #444;
-}
-
+renderRecent();
