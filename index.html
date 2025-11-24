@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title>오늘 뭐 먹지?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body class="theme-korean">
+
+    <div class="app">
+        <header class="top-bar">
+            <div class="logo-title">
+                <div class="logo-dot"></div>
+                <div class="title-text">
+                    <span class="app-title">오늘 뭐 먹지</span>
+                    <span class="app-subtitle">랜덤 메뉴 추천 서비스</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <p class="subtitle">
+                한식 · 중식 · 일식 · 양식 중에서<br />딱 맞는 메뉴를 추천해드려요.
+            </p>
+
+            <!-- 카테고리 버튼 -->
+            <div class="category-wrapper">
+                <button class="btn category-btn category-active"
+                        onclick="setCategory('korean', this)">한식</button>
+                <button class="btn category-btn"
+                        onclick="setCategory('chinese', this)">중식</button>
+                <button class="btn category-btn"
+                        onclick="setCategory('japanese', this)">일식</button>
+                <button class="btn category-btn"
+                        onclick="setCategory('western', this)">양식</button>
+            </div>
+
+            <!-- 추천 버튼 (초기에는 disabled) -->
+            <button id="recommendBtn" class="btn primary-btn" onclick="recommend()" disabled>
+                🍽 이 카테고리에서 추천받기
+            </button>
+
+            <!-- 완전 랜덤 추천 -->
+            <button class="btn secondary-btn" onclick="recommendAll()">
+                🎲 완전 랜덤으로 추천받기
+            </button>
+
+            <section id="result" class="food-card">
+                <p class="placeholder-text">
+                    카테고리를 선택한 뒤<br>추천 버튼을 눌러보세요.
+                </p>
+            </section>
+
+            <section class="recent">
+                <h3>최근 추천 메뉴</h3>
+                <div id="recent-list" class="recent-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
